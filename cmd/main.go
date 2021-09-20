@@ -58,12 +58,12 @@ func printBoard(b Board) {
 	fb := flattenBoard(b)
 
 	fmt.Println(fmt.Sprintf(`
-		  A - B - C
-		1 %s | %s | %s
+		  1 - 2 - 3
+		A %s | %s | %s
 		------------
-		2 %s | %s | %s
+		B %s | %s | %s
 		------------
-		3 %s | %s | %s
+		C %s | %s | %s
 	`, fb[0:]...))
 }
 
