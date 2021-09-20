@@ -30,7 +30,7 @@ type GameState struct {
 	playerOne     Player
 	playerTwo     Player
 	currentPlayer *Player
-	moveCount     uint8
+	movesLeft     int
 	board         Board
 }
 
@@ -197,10 +197,17 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 		os.Exit(0)
 	}
 
+	if gs.movesLeft == 0 {
+		fmt.Println(string(colorCyan), "Tie game! better luck next time.", string(colorReset))
+		os.Exit(0)
+	}
+
 	return nil
 }
 
 func gameLoop(gs GameState, ir *bufio.Reader) {
+	gs.movesLeft = gs.movesLeft - 1
+
 	err := playerMove(gs, ir)
 	if err != nil {
 		log.Fatal(string(colorRed), err, string(colorReset))
@@ -217,6 +224,7 @@ func gameLoop(gs GameState, ir *bufio.Reader) {
 
 func main() {
 	var gameState GameState
+	gameState.movesLeft = 0
 
 	// Bootstrapping
 	board := [][3]string{
@@ -226,7 +234,9 @@ func main() {
 	}
 
 	gameState.board = board
-	gameState.moveCount = 0
+	for _, cols := range gameState.board {
+		gameState.movesLeft += len(cols)
+	}
 
 	inputReader := bufio.NewReader(os.Stdin)
 
