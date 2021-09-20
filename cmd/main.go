@@ -12,13 +12,10 @@ import (
 
 const colorReset = "\033[0m"
 
-const colorRed = "\033[31m"
-const colorGreen = "\033[32m"
-const colorYellow = "\033[33m"
-const colorBlue = "\033[34m"
-const colorPurple = "\033[35m"
-const colorCyan = "\033[36m"
-const colorWhite = "\033[37m"
+const colorError = "\033[31m"
+const colorSystem = "\033[36m"
+const colorP1 = "\033[32m"
+const colorP2 = "\033[35m"
 
 type Player struct {
 	name  string
@@ -68,21 +65,21 @@ func printBoard(b Board) {
 }
 
 func createPlayer(n int, ir *bufio.Reader) Player {
-	fmt.Print(string(colorBlue), "Enter player one name: ", string(colorReset))
+	fmt.Print(string(colorSystem), "Enter player one name: ", string(colorReset))
 	name, err := ir.ReadString('\n')
 
 	if err != nil {
-		fmt.Println(string(colorRed), "Sorry an error ocurred while typing your name")
+		fmt.Println(string(colorError), "Sorry an error ocurred while typing your name")
 		log.Fatal("Error processing user input")
 	}
 
 	name = strings.TrimSuffix(name, "\n")
 
 	peice := "o"
-	color := colorGreen
+	color := colorP1
 	if n == 2 {
 		peice = "x"
-		color = colorPurple
+		color = colorP2
 	}
 
 	player := Player{name, peice, color}
@@ -150,7 +147,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	fmt.Printf("%s%s it's your turn to move: %s", string(gs.currentPlayer.color), gs.currentPlayer.name, string(colorReset))
 	cordinate, err := ir.ReadString('\n')
 	if err != nil {
-		fmt.Println(string(colorRed), "Sorry an error while you tried to make your move.", string(colorReset))
+		fmt.Println(string(colorError), "Sorry an error while you tried to make your move.", string(colorReset))
 		return errors.New("Could not read user cordinate input")
 	}
 
@@ -167,13 +164,13 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	case "c":
 		x = 2
 	default:
-		fmt.Println(string(colorRed), fmt.Sprintf("given row (%s) is not valid try again, should be (a-c)", string(cordinate[0])), string(colorReset))
+		fmt.Println(string(colorError), fmt.Sprintf("given row (%s) is not valid try again, should be (a-c)", string(cordinate[0])), string(colorReset))
 		playerMove(gs, ir)
 	}
 
 	cy, err := strconv.Atoi(string(cordinate[1]))
 	if err != nil {
-		fmt.Println(string(colorRed), fmt.Sprintf("Given colum (%d) is not valid try again, should be (1-3)", cy), string(colorReset))
+		fmt.Println(string(colorError), fmt.Sprintf("Given colum (%d) is not valid try again, should be (1-3)", cy), string(colorReset))
 		playerMove(gs, ir)
 	}
 
@@ -181,7 +178,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	y = cy - 1
 
 	if len(gs.board[x][y]) != 0 {
-		fmt.Println(string(colorRed), fmt.Sprintf("Field is already taken by '%s', try again.", gs.board[x][y]), string(colorReset))
+		fmt.Println(string(colorError), fmt.Sprintf("Field is already taken by '%s', try again.", gs.board[x][y]), string(colorReset))
 		playerMove(gs, ir)
 	}
 
@@ -193,12 +190,12 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	winner := winCheck(x, y, gs)
 	if winner {
 		message := fmt.Sprintf("Congratulations %s You won!", gs.currentPlayer.name)
-		fmt.Println(string(colorCyan), message, string(colorReset))
+		fmt.Println(string(colorSystem), message, string(colorReset))
 		os.Exit(0)
 	}
 
 	if gs.movesLeft == 0 {
-		fmt.Println(string(colorCyan), "Tie game! better luck next time.", string(colorReset))
+		fmt.Println(string(colorSystem), "Tie game! better luck next time.", string(colorReset))
 		os.Exit(0)
 	}
 
@@ -210,7 +207,7 @@ func gameLoop(gs GameState, ir *bufio.Reader) {
 
 	err := playerMove(gs, ir)
 	if err != nil {
-		log.Fatal(string(colorRed), err, string(colorReset))
+		log.Fatal(string(colorError), err, string(colorReset))
 	}
 
 	if gs.currentPlayer.peice == gs.playerOne.peice {
