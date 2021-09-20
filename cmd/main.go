@@ -89,8 +89,59 @@ func createPlayer(n int, ir *bufio.Reader) Player {
 	return player
 }
 
-func winCheck(x int, y int) bool {
+func winCheck(x int, y int, gs GameState) bool {
 	won := false
+	boardWidth := len(gs.board[x])
+
+	// Check rows
+	for i := 0; i < boardWidth; i++ {
+		if gs.board[x][i] != gs.currentPlayer.peice {
+			break
+		}
+
+		if i == boardWidth-1 {
+			won = true
+		}
+	}
+
+	// check columns
+	for i := 0; i < boardWidth; i++ {
+		if gs.board[i][y] != gs.currentPlayer.peice {
+			break
+		}
+
+		if i == boardWidth-1 {
+			won = true
+		}
+	}
+
+	// check a1 to c3 diagonal
+	if x == y {
+		for i := 0; i < boardWidth; i++ {
+			if gs.board[i][i] != gs.currentPlayer.peice {
+				break
+			}
+
+			if i == boardWidth-1 {
+				won = true
+			}
+		}
+	}
+
+	// check a3 to c1 reversed tiagonal
+	if x+y == boardWidth-1 {
+		for i := 0; i < boardWidth; i++ {
+			if gs.board[i][(boardWidth-1)-i] != gs.currentPlayer.peice {
+				break
+			}
+
+			if i == boardWidth-1 {
+				won = true
+			}
+		}
+
+	}
+
 	return won
 }
 
@@ -137,7 +188,9 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	// insert player peice at cordinates
 	gs.board[x][y] = gs.currentPlayer.peice
 
-	winner := winCheck(x, y)
+	printBoard(gs.board)
+
+	winner := winCheck(x, y, gs)
 	if winner {
 		message := fmt.Sprintf("Congratulations %s You won!", gs.currentPlayer.name)
 		fmt.Println(string(colorCyan), message, string(colorReset))
@@ -152,8 +205,6 @@ func gameLoop(gs GameState, ir *bufio.Reader) {
 	if err != nil {
 		log.Fatal(string(colorRed), err, string(colorReset))
 	}
-
-	printBoard(gs.board)
 
 	if gs.currentPlayer.peice == gs.playerOne.peice {
 		gs.currentPlayer = &gs.playerTwo
