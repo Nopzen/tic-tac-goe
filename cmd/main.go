@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -21,6 +23,7 @@ const colorWhite = "\033[37m"
 type Player struct {
 	name  string
 	peice string
+	color string
 }
 
 type GameState struct {
@@ -76,32 +79,81 @@ func createPlayer(n int, ir *bufio.Reader) Player {
 	name = strings.TrimSuffix(name, "\n")
 
 	peice := "o"
+	color := colorGreen
 	if n == 2 {
 		peice = "x"
+		color = colorPurple
 	}
 
-	player := Player{name, peice}
+	player := Player{name, peice, color}
 	return player
 }
 
-// missing arguments x int, y int
-func winCheck() bool {
-	won := true
+func winCheck(x int, y int) bool {
+	won := false
 	return won
 }
 
-func playerMove(gs GameState, ir *bufio.Reader) {
-	winner := winCheck()
+func playerMove(gs GameState, ir *bufio.Reader) error {
+
+	fmt.Printf("%s%s it's your turn to move: %s", string(gs.currentPlayer.color), gs.currentPlayer.name, string(colorReset))
+	cordinate, err := ir.ReadString('\n')
+	if err != nil {
+		fmt.Println(string(colorRed), "Sorry an error while you tried to make your move.", string(colorReset))
+		return errors.New("Could not read user cordinate input")
+	}
+
+	var x int
+	var y int
+
+	switch string(cordinate[0]) {
+	case "a":
+		x = 0
+	case "b":
+		x = 1
+	case "c":
+		x = 2
+	default:
+		// should retry
+		return errors.New("Failed to parse user given cordinate X")
+	}
+
+	cordinateY, err := strconv.Atoi(string(cordinate[1]))
+	if err != nil {
+		// Should retry
+		return errors.New("Failed to parse user given cordinate Y")
+	}
+
+	// subtract 1 to adhere to 0 index based arrays
+	y = cordinateY - 1
+
+	// insert player peice at cordinates
+	gs.board[x][y] = gs.currentPlayer.peice
+
+	winner := winCheck(x, y)
 	if winner {
 		message := fmt.Sprintf("Congratulations %s You won!", gs.currentPlayer.name)
 		fmt.Println(string(colorCyan), message, string(colorReset))
 		os.Exit(0)
 	}
+
+	return nil
 }
 
 func gameLoop(gs GameState, ir *bufio.Reader) {
-	playerMove(gs, ir)
+	err := playerMove(gs, ir)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	printBoard(gs.board)
+
+	if gs.currentPlayer.peice == gs.playerOne.peice {
+		gs.currentPlayer = &gs.playerTwo
+	} else {
+		gs.currentPlayer = &gs.playerOne
+	}
+
 	gameLoop(gs, ir)
 }
 
