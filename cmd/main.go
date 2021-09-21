@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/nopzen/tic-tac-goe/internal"
 )
 
 const colorReset = "\033[0m"
@@ -28,40 +30,7 @@ type GameState struct {
 	playerTwo     Player
 	currentPlayer *Player
 	movesLeft     int
-	board         Board
-}
-
-type Board [][3]string
-
-func flattenBoard(b Board) []interface{} {
-	var flatBoard []interface{}
-
-	for _, cells := range b {
-		for i := 0; i < len(cells); i++ {
-			value := cells[i]
-
-			if len(cells[i]) == 0 {
-				value = " "
-			}
-
-			flatBoard = append(flatBoard, value)
-		}
-	}
-
-	return flatBoard
-}
-
-func printBoard(b Board) {
-	fb := flattenBoard(b)
-
-	fmt.Println(fmt.Sprintf(`
-		  1 - 2 - 3
-		A %s | %s | %s
-		------------
-		B %s | %s | %s
-		------------
-		C %s | %s | %s
-	`, fb[0:]...))
+	board         internal.Board
 }
 
 func createPlayer(n int, ir *bufio.Reader) Player {
@@ -189,7 +158,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	// insert player peice at cordinates
 	gs.board[x][y] = gs.currentPlayer.peice
 
-	printBoard(gs.board)
+	internal.PrintBoard(gs.board)
 
 	winner := winCheck(x, y, gs)
 	if winner {
@@ -254,7 +223,7 @@ func main() {
 	gameState.currentPlayer = &gameState.playerOne
 
 	// Star Game
-	printBoard(board) // Print the inital board state
+	internal.PrintBoard(board) // Print the inital board state
 	gameState.movesLeft = gameState.movesLeft - 1
 
 	for {
