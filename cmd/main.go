@@ -156,6 +156,10 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	var x int
 	var y int
 
+	if len(cordinate) != 2 {
+		return errors.New("Please enter a valid cordinate eg. b2")
+	}
+
 	switch string(cordinate[0]) {
 	case "a":
 		x = 0
@@ -203,11 +207,11 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 }
 
 func gameLoop(gs GameState, ir *bufio.Reader) {
-	gs.movesLeft = gs.movesLeft - 1
-
 	err := playerMove(gs, ir)
 	if err != nil {
-		log.Fatal(string(colorError), err, string(colorReset))
+		fmt.Println(string(colorError), err)
+		gameLoop(gs, ir)
+		return
 	}
 
 	if gs.currentPlayer.peice == gs.playerOne.peice {
@@ -216,6 +220,7 @@ func gameLoop(gs GameState, ir *bufio.Reader) {
 		gs.currentPlayer = &gs.playerOne
 	}
 
+	gs.movesLeft = gs.movesLeft - 1
 	gameLoop(gs, ir)
 }
 
@@ -250,5 +255,9 @@ func main() {
 
 	// Star Game
 	printBoard(board) // Print the inital board state
-	gameLoop(gameState, inputReader)
+	gameState.movesLeft = gameState.movesLeft - 1
+
+	for {
+		gameLoop(gameState, inputReader)
+	}
 }
