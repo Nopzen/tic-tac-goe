@@ -117,7 +117,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	cordinate, err := ir.ReadString('\n')
 	if err != nil {
 		fmt.Println(string(colorError), "Sorry an error while you tried to make your move.", string(colorReset))
-		return errors.New("Could not read user cordinate input")
+		return errors.New("could not read user cordinate input")
 	}
 
 	cordinate = strings.TrimSuffix(cordinate, "\n")
@@ -126,7 +126,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 	var y int
 
 	if len(cordinate) != 2 {
-		return errors.New("Please enter a valid cordinate eg. b2")
+		return errors.New("please enter a valid cordinate eg. b2")
 	}
 
 	switch string(cordinate[0]) {
@@ -138,13 +138,13 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 		x = 2
 	default:
 		fmt.Println(string(colorError), fmt.Sprintf("given row (%s) is not valid try again, should be (a-c)", string(cordinate[0])), string(colorReset))
-		return errors.New("Failed to process X cordinate")
+		return errors.New("failed to process X cordinate")
 	}
 
 	cy, err := strconv.Atoi(string(cordinate[1]))
 	if err != nil {
 		fmt.Println(string(colorError), fmt.Sprintf("Given colum (%d) is not valid try again, should be (1-3)", cy), string(colorReset))
-		return errors.New("Failed to process Y cordinate")
+		return errors.New("failed to process Y cordinate")
 	}
 
 	// subtract 1 to adhere to 0 index based arrays
@@ -152,7 +152,7 @@ func playerMove(gs GameState, ir *bufio.Reader) error {
 
 	if len(gs.board[x][y]) != 0 {
 		fmt.Println(string(colorError), fmt.Sprintf("Field is already taken by '%s', try again.", gs.board[x][y]), string(colorReset))
-		return errors.New("Failed to process cordinate, field already taken.")
+		return errors.New("failed to process cordinate, field already taken")
 	}
 
 	// insert player peice at cordinates
