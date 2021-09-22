@@ -8,8 +8,8 @@ Go implementation of common kids game Tic Tac Toe, this implementation is ment f
 - [x] Implement `gameLoop` functionality
 - [x] Implement `playerMove` functionality
 - [x] Implement `winCheck` functionality
-- [ ] Implement tests cases
-- [ ] Create `man` page
+- [x] Implement tests cases
+- [x] Create `man` page
 - [ ] Create build pipeline
 - [ ] Create `apt` package (for Linux)
 - [ ] Create `brew` package (for Mac)
