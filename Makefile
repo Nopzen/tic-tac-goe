@@ -2,7 +2,7 @@ go_vet:
 	go vet ./...
 .PHONY:
 
-go_test:
+go_test: go_vet
 	go test ./...
 .PHONY:
 
@@ -14,6 +14,6 @@ clean:
 	rm -rf ./bin
 .PHONY:
 
-build: clean go_get go_vet go_test
+build: clean go_get go_test
 	go build -o ./bin/tic-tac-goe ./cmd
 .PHONY:
