@@ -1,0 +1,18 @@
+.\" Manpage for tic-tac-goe.
+.\" Open pull requests here https://github.com/Nopzen/tic-tac-goe/ to correct errors or typos.
+.TH man 6 "21 September 2021" "1.0" "tic-tac-goe man page"
+.SH NAME
+tic-tac-goe \- starts the game 
+.SH SYNOPSIS
+tic-tac-goe
+.SH DESCRIPTION
+tic-tac-goe is a small command line version of the game Tic Tac Toe, once started enter players names and start playing.
+The game uses a simple grid to play the game, first enter the row (a-c) and then the column (1-3).
+.SH OPTIONS
+The tic-tac-goe command does not take any options as of now, in the future options could be come relevant.
+.SH SEE ALSO
+Github \- https://github.com/Nopzen/tic-tac-goe/
+.SH BUGS
+Uppercase row letter not working as intended \- https://github.com/Nopzen/tic-tac-goe/issues/1
+.SH AUTHOR
+Lars Krieger (github@larskrieger.io)
