@@ -1,7 +1,7 @@
 name: run-tests
 on: [push]
 jobs:
-  check-bats-version:
+  run-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -9,4 +9,5 @@ jobs:
         with:
           go-version: '^1.17.1'
       - run: go mod download
+      - run: ls -a
       - run: go test ./..
