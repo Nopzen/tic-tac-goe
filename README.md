@@ -1,4 +1,4 @@
-![example workflow](https://github.com/nopzen/tic-tac-goe/actions/workflows/run-ci/badge.svg)
+![Continious integration status](https://github.com/nopzen/tic-tac-goe/actions/workflows/run-ci.yml/badge.svg)
 
 # Tic Tac Goe
 
