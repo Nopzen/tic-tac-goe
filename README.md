@@ -1,3 +1,5 @@
+![example workflow](https://github.com/nopzen/tic-tac-goe/actions/workflows/run-ci/badge.svg)
+
 # Tic Tac Goe
 
 Go implementation of common kids game Tic Tac Toe, this implementation is ment for me to explore the Go language and learn while building something.
