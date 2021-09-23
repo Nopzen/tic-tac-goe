@@ -12,7 +12,7 @@ Go implementation of common kids game Tic Tac Toe, this implementation is ment f
 - [x] Implement `winCheck` functionality
 - [x] Implement tests cases
 - [x] Create `man` page
-- [ ] Create build pipeline
+- [x] Create build pipeline
 - [ ] Create `apt` package (for Linux)
 - [ ] Create `brew` package (for Mac)
 
