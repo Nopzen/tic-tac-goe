@@ -34,7 +34,7 @@ type GameState struct {
 }
 
 func createPlayer(n int, ir *bufio.Reader) Player {
-	fmt.Print(string(colorSystem), "Enter player one name: ", string(colorReset))
+	fmt.Print(string(colorSystem), fmt.Sprintf("Enter player %d name: ", n), string(colorReset))
 	name, err := ir.ReadString('\n')
 
 	if err != nil {
